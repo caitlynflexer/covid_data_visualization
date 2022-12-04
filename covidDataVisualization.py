@@ -10,8 +10,7 @@ from sodapy import Socrata
 
 client = Socrata("data.cdc.gov", None)
 
-# Returns results as JSON from API / converted to Python list of
-# dictionaries by sodapy.
+# Returns results as JSON from API / converted to Python list of dictionaries by sodapy.
 results = client.get("3nnm-4jni", limit=10000000)
 
 # Convert to pandas DataFrame
@@ -34,7 +33,7 @@ def create_map():
                             locationmode='geojson-id', 
                             scope='usa', 
                             color='covid_cases_per_100k', 
-                            range_color=(0,300),
+                            range_color=(0, 300),
                             labels={"covid_cases_per_100k":"COVID-19 cases per 100k"}, 
                             color_continuous_scale='ice_r')
          
@@ -52,7 +51,5 @@ def create_map():
     ])
     
     app.run_server(debug=True)
-
-
 
 create_map()
