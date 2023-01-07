@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
-import pandas as pd
 import json
 from urllib.request import urlopen
 from sodapy import Socrata
@@ -24,7 +23,7 @@ def create_map():
     df = pd.read_csv('out.csv', dtype={"county_fips": str}) 
     data = df[['county_fips', 'covid_cases_per_100k']]
 
-    f_geojson = open('../geojson_data/counties_fips.json')
+    f_geojson = open('counties_fips.json')
     geojson_data = json.load(f_geojson)
     
     fig = px.choropleth(data, 
