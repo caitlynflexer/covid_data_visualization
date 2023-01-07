@@ -1,3 +1,4 @@
+from urllib.request import urlopen
 import pandas as pd
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
@@ -14,22 +15,28 @@ results_df = pd.DataFrame.from_records(results)
 results_df.to_csv('out.csv', index=False)
 
 app = Dash(__name__)
-server = app.server
+
 
 def create_map():
     df = pd.read_csv('out.csv', dtype={"county_fips": str}) 
     data = df[['county_fips', 'covid_cases_per_100k']]
 
-    f_geojson = open('counties_fips.json')
-    geojson_data = json.load(f_geojson)
+    # f_geojson = open('counties_fips.json')
+    # geojson_data = json.load(f_geojson)
+
+    with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
+        counties = json.load(response)
     
-    fig = px.choropleth(data, 
-                            geojson=geojson_data, 
+    fig = px.choropleth_mapbox(data, 
+                            geojson=counties, 
                             locations='county_fips', 
-                            locationmode='geojson-id', 
-                            scope='usa', 
+                            #locationmode='geojson-id', 
+                            #scope='usa', 
+                            mapbox_style="carto-positron",
+                            zoom=3, center = {"lat": 37.0902, "lon": -95.7129},
+                            opacity=0.5,
                             color='covid_cases_per_100k', 
-                            range_color=(0, 300),
+                            range_color=(0,300),
                             labels={"covid_cases_per_100k":"COVID-19 cases per 100k"}, 
                             color_continuous_scale='ice_r')
          
@@ -47,5 +54,7 @@ def create_map():
     ])
     
     app.run_server(debug=True)
+
+
 
 create_map()
