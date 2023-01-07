@@ -17,7 +17,7 @@ results_df = pd.DataFrame.from_records(results)
 results_df.to_csv('out.csv', index=False)
 
 app = Dash(__name__)
-
+server = app.server
 
 def create_map():
     df = pd.read_csv('out.csv', dtype={"county_fips": str}) 
