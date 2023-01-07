@@ -1,9 +1,8 @@
 import pandas as pd
-import numpy as np
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
+import pandas as pd
 import json
-from urllib.request import urlopen
 from sodapy import Socrata
 
 client = Socrata("data.cdc.gov", None)
