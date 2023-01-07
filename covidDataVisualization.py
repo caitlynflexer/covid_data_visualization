@@ -1,4 +1,3 @@
-from urllib.request import urlopen
 import pandas as pd
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
@@ -8,7 +7,7 @@ from sodapy import Socrata
 client = Socrata("data.cdc.gov", None)
 
 # Returns results as JSON from API / converted to Python list of dictionaries by sodapy.
-results = client.get("3nnm-4jni", limit=100000)
+results = client.get("3nnm-4jni", limit=10000000)
 
 # Convert to pandas DataFrame
 results_df = pd.DataFrame.from_records(results)
@@ -21,17 +20,12 @@ def create_map():
     df = pd.read_csv('out.csv', dtype={"county_fips": str}) 
     data = df[['county_fips', 'covid_cases_per_100k']]
 
-    # f_geojson = open('counties_fips.json')
-    # geojson_data = json.load(f_geojson)
-
-    with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
-        counties = json.load(response)
+    f_geojson = open('counties_fips.json')
+    geojson_data = json.load(f_geojson)
     
     fig = px.choropleth_mapbox(data, 
-                            geojson=counties, 
+                            geojson=geojson_data, 
                             locations='county_fips', 
-                            #locationmode='geojson-id', 
-                            #scope='usa', 
                             mapbox_style="carto-positron",
                             zoom=3, center = {"lat": 37.0902, "lon": -95.7129},
                             opacity=0.5,
