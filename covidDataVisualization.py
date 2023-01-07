@@ -8,7 +8,7 @@ from sodapy import Socrata
 client = Socrata("data.cdc.gov", None)
 
 # Returns results as JSON from API / converted to Python list of dictionaries by sodapy.
-results = client.get("3nnm-4jni", limit=1000)
+results = client.get("3nnm-4jni", limit=10000)
 
 # Convert to pandas DataFrame
 results_df = pd.DataFrame.from_records(results)
